@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sae-student-election
+    runtime: python
+    plan: free
+    buildCommand: ""
+    startCommand: python server.py
+    healthCheckPath: /
+    envVars:
+      - key: HOST
+        value: 0.0.0.0

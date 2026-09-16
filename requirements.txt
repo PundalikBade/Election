@@ -1,0 +1,4 @@
+# Student Association Election System
+# This project uses ONLY Python's built-in standard library.
+# No third-party packages are required, so there are no dependencies to install.
+# Runtime requirement: Python 3.8 or newer (uses http.server, sqlite3, json, secrets).
