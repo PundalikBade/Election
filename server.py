@@ -10,6 +10,9 @@ from urllib.parse import urlparse, unquote
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "election.db")
 PORT = int(os.environ.get("PORT", "8000"))
+HOST = os.environ.get("HOST", "127.0.0.1")
+if os.environ.get("RENDER"):
+    HOST = "0.0.0.0"
 
 COLLEGE_NAME = "College of Engineering"
 DEPARTMENTS = ["AI & ML", "Computer Engineering", "Civil Engineering", "Electronics & Telecommunication"]
@@ -1024,7 +1027,7 @@ if __name__ == "__main__":
         allow_reuse_address = False
 
     try:
-        server = NoReuseServer(("127.0.0.1", PORT), Handler)
+        server = NoReuseServer((HOST, PORT), Handler)
     except OSError:
         print("  Port %d is already in use - the server appears to already be running." % PORT)
         print("  Just open http://localhost:%d in your browser." % PORT)
@@ -1032,7 +1035,7 @@ if __name__ == "__main__":
     print("=" * 56)
     print("  Student Association Election System")
     print(f"  Database : {DB_PATH}")
-    print(f"  URL      : http://localhost:{PORT}")
+    print(f"  URL      : http://{HOST}:{PORT}")
     print("  Admin    : admin / admin123")
     print("  Demo voters (ID / PIN):")
     print("    AIML_01 / 482913   | CSE_07 / 216907")
