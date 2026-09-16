@@ -3,9 +3,11 @@ services:
     name: sae-student-election
     runtime: python
     plan: free
-    buildCommand: ""
+    buildCommand: pip install -r requirements.txt
     startCommand: python server.py
     healthCheckPath: /
     envVars:
       - key: HOST
         value: 0.0.0.0
+      - key: MONGODB_URI
+        sync: false

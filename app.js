@@ -1,7 +1,8 @@
 const COLLEGE_NAME = "College of Engineering";
 const DEFAULT_DEPARTMENTS = ["AI & ML", "Computer Engineering", "Civil Engineering", "Electronics & Telecommunication"];
 
-const API_BASE = location.protocol === "file:" ? "http://localhost:8000" : "";
+const isLocalHost = ["localhost", "127.0.0.1"].includes(location.hostname);
+const API_BASE = (location.protocol === "file:" || (isLocalHost && location.port && location.port !== "8000")) ? "http://localhost:8000" : "";
 
 async function api(path, opts = {}) {
   const headers = {};
@@ -936,7 +937,7 @@ async function renderStudents() {
     <div class="card" style="padding:16px 20px">
       <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px">
         <span class="pill eligible">${students.length} students on record</span>
-        <span class="pill">Voter status and ballots stored in separate tables</span>
+        <span class="pill">Voter status and ballots stored in MongoDB</span>
       </div>
     </div>
     <div class="card" style="overflow-x:auto">
