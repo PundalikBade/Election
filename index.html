@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Association Election System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ============ STUDENT LOGIN ============ -->
+  <div id="login-screen" class="screen active">
+    <div class="container narrow">
+      <div class="header">
+        <div class="logo">🎓</div>
+        <h1>Student Association Election</h1>
+        <p class="subtitle">College of Engineering • 2025–2026</p>
+      </div>
+      <div class="card login-card">
+        <h2>Voter Login</h2>
+        <p class="card-hint">Use your Student ID and the one-time PIN provided with your registration.</p>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="student-id">Student ID</label>
+            <input type="text" id="student-id" placeholder="e.g. AIML_01" autocomplete="off" required>
+          </div>
+          <div class="form-group">
+            <label for="student-pin">One-Time PIN</label>
+            <input type="password" id="student-pin" placeholder="Enter your PIN" autocomplete="off" required>
+            <span class="field-note">PINs are randomly generated and given only to you.</span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Login &amp; Vote</button>
+        </form>
+        <div style="margin-top:12px;padding:10px;border:1px dashed #cfd3dc;border-radius:10px;background:#f7f8fa;font-size:13px;line-height:1.8">
+          <strong style="color:#2b3a4a">Demo voter accounts</strong><br>
+          <code>AIML_01</code> / PIN <code>482913</code> &nbsp;·&nbsp;
+          <code>CSE_07</code> / PIN <code>216907</code> &nbsp;·&nbsp;
+          <code>ETC_15</code> / PIN <code>905614</code>
+        </div>
+        <div class="divider"><span>or</span></div>
+        <button id="go-admin-login" class="btn btn-outline btn-full">Administrator Login</button>
+      </div>
+      <p class="footer-note">Secret ballot. Your selections can never be linked to your identity.</p>
+    </div>
+  </div>
+
+  <!-- ============ ADMIN LOGIN ============ -->
+  <div id="admin-login-screen" class="screen">
+    <div class="container narrow">
+      <div class="header">
+        <div class="logo">🛡️</div>
+        <h1>Administrator Login</h1>
+        <p class="subtitle">Election management console</p>
+      </div>
+      <div class="card login-card">
+        <form id="admin-login-form">
+          <div class="form-group">
+            <label for="admin-username">Username</label>
+            <input type="text" id="admin-username" placeholder="admin" required>
+          </div>
+          <div class="form-group">
+            <label for="admin-password">Password</label>
+            <input type="password" id="admin-password" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Enter Dashboard</button>
+        </form>
+        <div class="divider"><span>or</span></div>
+        <button id="go-back-login" class="btn btn-outline btn-full">← Back to Voter Login</button>
+        <p class="field-note" style="margin-top:12px">Default: admin / admin123</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ELECTION CENTER (student) ============ -->
+  <div id="election-center-screen" class="screen">
+    <div class="container">
+      <div class="top-bar">
+        <span id="center-voter-info"></span>
+        <button id="center-logout" class="btn btn-outline btn-small">Logout</button>
+      </div>
+      <h2 class="page-title">Your Elections</h2>
+      <div id="election-list"></div>
+    </div>
+  </div>
+
+  <!-- ============ VOTING ============ -->
+  <div id="voting-screen" class="screen">
+    <div class="container">
+      <div class="top-bar">
+        <div>
+          <strong id="voting-election-title" class="block"></strong>
+          <span id="voter-info" class="muted small"></span>
+        </div>
+        <button id="vote-back-center" class="btn btn-outline btn-small">Exit</button>
+      </div>
+
+      <div class="position-tabs" id="position-tabs"></div>
+      <div id="voting-positions"></div>
+
+      <div class="nav-buttons">
+        <button id="prev-btn" class="btn btn-outline" style="display:none;">← Previous</button>
+        <button id="next-btn" class="btn btn-primary">Next Position →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ REVIEW ============ -->
+  <div id="review-screen" class="screen">
+    <div class="container narrow">
+      <div class="top-bar">
+        <strong>Review Your Vote</strong>
+        <button id="review-edit" class="btn btn-outline btn-small">Edit</button>
+      </div>
+      <div class="card">
+        <h2>Confirm Your Selections</h2>
+        <p class="card-hint">This is your final review. Once submitted, your vote cannot be changed.</p>
+        <div id="review-list"></div>
+        <button id="submit-votes-btn" class="btn btn-success btn-full">Confirm and Submit Vote</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SUCCESS ============ -->
+  <div id="success-screen" class="screen">
+    <div class="container narrow">
+      <div class="card success-card">
+        <div class="checkmark">✓</div>
+        <h1>Vote Submitted</h1>
+        <p>Thank you for participating. Your ballot has been recorded anonymously.</p>
+        <div class="receipt-box" id="receipt-box"></div>
+        <button id="view-results-btn" class="btn btn-primary btn-full">View Public Results</button>
+        <button id="logout-final-btn" class="btn btn-outline btn-full">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ PUBLIC RESULTS DASHBOARD ============ -->
+  <div id="results-screen" class="screen">
+    <div class="container wide">
+      <div class="top-bar">
+        <h3>🏛️ Live Results Dashboard</h3>
+        <button id="results-back" class="btn btn-outline btn-small">Back</button>
+      </div>
+      <div class="card dashboard-header">
+        <div id="dashboard-meta"></div>
+        <div class="stat-grid" id="dashboard-stats"></div>
+        <div id="dashboard-status"></div>
+      </div>
+      <div id="results-list"></div>
+    </div>
+  </div>
+
+  <!-- ============ ADMIN DASHBOARD ============ -->
+  <div id="admin-screen" class="screen">
+    <div class="container wide">
+      <div class="top-bar">
+        <h3>🛡️ Administrator Dashboard</h3>
+        <button id="admin-logout" class="btn btn-outline btn-small">Logout</button>
+      </div>
+
+      <div class="admin-layout">
+        <aside class="admin-sidebar">
+          <div class="admin-nav-item active" data-tab="elections">🗳️ Elections</div>
+          <div class="admin-nav-item" data-tab="candidates">👥 Candidates</div>
+          <div class="admin-nav-item" data-tab="students">📥 Students</div>
+          <div class="admin-nav-item" data-tab="voting">🕐 Manage Voting</div>
+          <div class="admin-nav-item" data-tab="results">📊 Results</div>
+          <div class="admin-nav-item" data-tab="audit">📜 Audit Log</div>
+        </aside>
+
+        <main class="admin-main">
+
+          <!-- Elections -->
+          <div class="admin-panel" id="panel-elections">
+            <div class="panel-head">
+              <h4>Elections</h4>
+              <button id="create-election-btn" class="btn btn-primary btn-small">+ New Election</button>
+            </div>
+            <div id="election-manage-list"></div>
+          </div>
+
+          <!-- Candidates -->
+          <div class="admin-panel" id="panel-candidates" style="display:none;">
+            <div class="panel-head">
+              <h4>Candidates</h4>
+              <div class="panel-actions">
+                <select id="cand-election-select" class="select-inline"></select>
+                <button id="add-candidate-btn" class="btn btn-primary btn-small">+ Add Candidate</button>
+              </div>
+            </div>
+            <div id="candidate-manage-list"></div>
+          </div>
+
+          <!-- Students -->
+          <div class="admin-panel" id="panel-students" style="display:none;">
+            <div class="panel-head">
+              <h4>Student Registry</h4>
+              <div class="panel-actions">
+                <button id="import-students-btn" class="btn btn-primary btn-small">📥 Import .CSV</button>
+              </div>
+            </div>
+            <div class="card import-guide">
+              <h4>Import format</h4>
+              <pre>StudentID, StudentName, Department, Year
+AIML_01, Suraj Jadhav, AI &amp; ML, SE
+CIVIL_03, Aditya Patil, Civil Engineering, SE</pre>
+              <p class="small muted">Validated on upload: required columns, duplicate IDs, invalid records. Valid rows are saved after confirmation. Each student receives a randomly generated one-time PIN.</p>
+            </div>
+            <input type="file" id="csv-input" accept=".csv,text/csv" style="display:none;">
+            <div id="student-manage-list"></div>
+          </div>
+
+          <!-- Manage Voting -->
+          <div class="admin-panel" id="panel-voting" style="display:none;">
+            <div class="panel-head">
+              <h4>Voting Controls</h4>
+              <span id="voting-status-pill" class="pill"></span>
+            </div>
+            <div id="voting-control-list"></div>
+          </div>
+
+          <!-- Results -->
+          <div class="admin-panel" id="panel-results" style="display:none;">
+            <div class="panel-head">
+              <h4>Results &amp; Publishing</h4>
+              <button id="export-results-btn" class="btn btn-outline btn-small">⬇ Export (CSV)</button>
+            </div>
+            <div id="admin-results-list"></div>
+          </div>
+
+          <!-- Audit -->
+          <div class="admin-panel" id="panel-audit" style="display:none;">
+            <div class="panel-head">
+              <h4>Audit Log</h4>
+              <button id="clear-audit-btn" class="btn btn-outline btn-small">Clear Log</button>
+            </div>
+            <div id="audit-log-list"></div>
+          </div>
+
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODALS ============ -->
+  <div id="modal-backdrop" class="modal-backdrop" style="display:none;">
+    <div class="modal" id="modal-box"></div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
